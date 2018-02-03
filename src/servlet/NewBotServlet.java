@@ -44,7 +44,7 @@ public class NewBotServlet extends HttpServlet {
 						int status2 = pst.executeUpdate();
 						if(status2 > 0){
 							request.setAttribute("dbName", botName);
-							RequestDispatcher rd = request.getRequestDispatcher("/entityIntent.jsp");
+							RequestDispatcher rd = request.getRequestDispatcher("/keywordAndQuery.jsp");
 							rd.forward(request, response);
 						}else{
 							// delete the new row of 'bots' table if the create database query failed
