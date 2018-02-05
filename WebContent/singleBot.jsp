@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Home</title>
+<title>MyBot</title>
 </head>
 <body>
 	<!-- Session checking -->
@@ -16,11 +16,10 @@
 		}
 	%>
 	<div class="header">
-		<h4>WELCOME <%= session.getAttribute("user") %></h4>
 		<a href="Logout">LogOut</a>
 	</div>
 	<div class="main">
-		<div class="left">
+		<div class="left" style="float: left">
 			<label> Your Bots</label>
 			<ul>
  				<c:forEach items="${bots}" var="value">
@@ -28,8 +27,15 @@
  				</c:forEach>
 			</ul>
 		</div>
-		<div class="right">
-			<a href="createNewBot.jsp">Create A New Bot</a>
+		<div class="right" style="float: right">
+			<a href="createNewBot.jsp">Create A New Bot</a> <br>
+			<label> Keywords </label> <br>
+			<ul>
+ 				<c:forEach items="${entities}" var="val">
+  					<li> <a href="QueryHandler?paramT=${ val }&dbName=${ param.dbName }"> <c:out value="${val}"/> </a> </li>
+ 				</c:forEach>
+			</ul>
+			<a href="keywordAndQuery.jsp?dbName=${param.dbName}">Create New Entity</a>
 		</div>
 	</div>
 	<div class="footer"></div>

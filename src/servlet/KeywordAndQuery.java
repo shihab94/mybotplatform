@@ -39,7 +39,7 @@ public class KeywordAndQuery extends HttpServlet {
 					Connection con = new DBConnection().checkConnection(dbName,"root");
 					// creating reply table
 					pw.println("ok0");
-					String tableSql = "CREATE TABLE replies( replyId int AUTO_INCREMENT PRIMARY KEY,reply varchar(100) not null)";
+					String tableSql = "CREATE TABLE IF NOT EXISTS replies( replyId int AUTO_INCREMENT PRIMARY KEY,reply varchar(100) not null)";
 					PreparedStatement pst = con.prepareStatement(tableSql);
 					int status = pst.executeUpdate();
 					//if(status > 0){
@@ -60,7 +60,7 @@ public class KeywordAndQuery extends HttpServlet {
 								int replyId = rst.getInt("replyId");
 								pw.println("ok3");
 								//creating keyword table
-								String keywordTableSql = "CREATE TABLE "+keyword+
+								String keywordTableSql = "CREATE TABLE IF NOT EXISTS "+keyword+
 										"( id int AUTO_INCREMENT PRIMARY KEY,query varchar(100) not null,replyId int not null,FOREIGN KEY (replyId) REFERENCES replies(replyId))";
 								pst = con.prepareStatement(keywordTableSql);
 								int status2 = pst.executeUpdate();

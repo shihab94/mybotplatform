@@ -24,7 +24,7 @@
 			<input type="text" name="query" placeholder="query"> <br>
 			<label>Reply</label>
 			<input type="text" name="reply" placeholder="query reply"> <br>
-			<input type="hidden" name="dbName" value="${ dbName }">
+			<input type="hidden" name="dbName" value="${ param.dbName }">
 			<input type="submit" value="Done">
 		</form>
 	</div>
