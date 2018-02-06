@@ -10,11 +10,11 @@
 	<div class="main">
 		<h4>Welcome To MyBot Platform</h4>
 		<form action="AdminLogin" method="POST">
-		<input type="text" name="userName" placeholder="user_name"> <br> 
-		<input type="password" name="password" placeholder="password"> <br>
-		<input type="submit" name="action" value="Login">
-		<input type="submit" name="action" value="SignUp">
-	</form>
+			<input type="text" name="userName" placeholder="user_name"> <br> 
+			<input type="password" name="password" placeholder="password"> <br>
+			<input type="submit" name="action" value="Login">
+			<input type="submit" name="action" value="SignUp">
+		</form>
 	</div>
 </body>
 </html>

@@ -18,37 +18,73 @@ import javax.servlet.http.HttpServletResponse;
 
 import util.DBConnection;
 
-
 @WebServlet("/QueryInsert")
 public class QueryInsert extends HttpServlet {
-	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		PrintWriter pw = response.getWriter();
 		String tableName = request.getParameter("paramT");
 		String dbName = request.getParameter("dbName");
 		String[] query = request.getParameterValues("query");
-		
+		String answer = request.getParameter("answer");
+
 		// entity query for corresponding bot
-		Connection con = new DBConnection().checkConnection(dbName,"root");
-		if(con != null){
-			StringBuilder sql = new StringBuilder("INSERT INTO "+tableName+"(query) VALUES(");
-			for(int i = 0; i<query.length; i++){
-				sql.append("'"+query[i]+"'"); 
-				if(i != (query.length - 1) ){
+		Connection con = new DBConnection().checkConnection(dbName, "root");
+		if (con != null) {
+			int replyId = 0;
+			PreparedStatement pst;
+			if (answer != null && answer != "") {
+				String sql = "INSERT INTO replies(reply) values(?)";
+				try {
+					pst = con.prepareStatement(sql);
+					pst.setString(1, answer);
+					int row = pst.executeUpdate();
+					if (row > 0) {
+						// pw.println("ok2");
+						// selecting latest answer from reply table
+						String replySql = "SELECT MAX(replyId) as replyId FROM replies";
+						pst = con.prepareStatement(replySql);
+						ResultSet rst = pst.executeQuery();
+						if (rst.next()) {
+							replyId = rst.getInt("replyId");
+						}
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+
+			} else {
+				String replySql = "SELECT MAX(replyId) as replyId FROM replies";
+				try {
+					pst = con.prepareStatement(replySql);
+					ResultSet rst = pst.executeQuery();
+					if (rst.next()) {
+						replyId = rst.getInt("replyId");
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+
+			}
+			StringBuilder sql = new StringBuilder("INSERT INTO " + tableName + "(query,replyId) VALUES");
+			for (int i = 0; i < query.length; i++) {
+				sql.append("('" + query[i] + "'," + replyId + ")");
+				if (i != (query.length - 1)) {
 					sql.append(",");
 				}
 			}
-			sql.append(")");
+			// sql.append(")");
 			pw.println(sql);
 			try {
-				PreparedStatement pst = con.prepareStatement(sql.toString());
+				pst = con.prepareStatement(sql.toString());
 				int status = pst.executeUpdate();
-				if(status > 0){
-					String sql2 = "SELECT * FROM "+tableName;
+				if (status > 0) {
+					String sql2 = "SELECT * FROM " + tableName;
 					pst = con.prepareStatement(sql2);
 					ResultSet rst = pst.executeQuery();
 					List<String> list = new ArrayList<>();
-					while(rst.next()){
+					while (rst.next()) {
 						list.add(rst.getString("query"));
 					}
 					con.close();

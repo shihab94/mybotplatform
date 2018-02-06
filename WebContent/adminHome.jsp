@@ -24,7 +24,7 @@
 			<label> Your Bots</label>
 			<ul>
  				<c:forEach items="${bots}" var="value">
-  					<li> <a href="SingleBotHandler?dbName=${ value }"> <c:out value="${value}"/> </a> </li>
+  					<li> <a href="SingleBotHandler?botName=${ value }"> <c:out value="${value}"/> </a> </li>
  				</c:forEach>
 			</ul>
 		</div>

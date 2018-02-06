@@ -5,6 +5,18 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
+<script type="text/javascript">
+	function add(){
+		var textBox = document.createElement("input");
+		textBox.setAttribute("type","text");
+		textBox.setAttribute("name","query");
+		textBox.setAttribute("placeholder","add new query");
+		var newLine = document.createElement("BR");
+		var span = document.getElementById("newRow");
+		span.appendChild(newLine);
+		span.appendChild(textBox);
+	}
+</script>
 </head>
 <body>
 	<!-- Session checking -->
@@ -14,17 +26,18 @@
 			response.sendRedirect("admin.jsp");
 		}
 	%>
-	Data base name is <%= request.getAttribute("dbName") %>
+	Data base name is <%= session.getAttribute("dbName") %>
 	<div class="main">
 		<form action="KeywordAndQuery" method="POST">
-			<label>Keyword Name</label>
+			<label>Keyword Name</label> <br> <br>
 			<input type="text" name="keyword" placeholder="keyword"> <br>
-			<label>Pre-Generated Query</label>
-			<label>Note : Query Should contains Keyword</label>
-			<input type="text" name="query" placeholder="query"> <br>
+			<label>Pre-Generated Query</label> <br>
+			<label>Note : Query Should contains Keyword</label> <br> <br>
+			<input type="text" name="query" placeholder="add query">
+			<span id="newRow"> </span>
+			<input type="button" name="addRow" value="AddRow" onclick="add();"> <br> <br>
 			<label>Reply</label>
 			<input type="text" name="reply" placeholder="query reply"> <br>
-			<input type="hidden" name="dbName" value="${ param.dbName }">
 			<input type="submit" value="Done">
 		</form>
 	</div>

@@ -21,26 +21,23 @@ import util.DBConnection;
 /**
  * Servlet implementation class AdminLogin
  */
-@WebServlet(description = "This page hadles the login operation and also redirect to signup page for non registered", urlPatterns = { "/AdminLogin" })
+@WebServlet(description = "This page hadles the login operation and also redirect to signup page for non registered", urlPatterns = {
+		"/AdminLogin" })
 public class AdminLogin extends HttpServlet {
-	 
-    public AdminLogin() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		PrintWriter pw = response.getWriter();
 		String userName = request.getParameter("userName");
 		String password = request.getParameter("password");
 		String action = request.getParameter("action");
-		
+
 		// checking login or signup
-		if(action.equals("Login")){
+		if (action.equals("Login")) {
 			// form validation
-			if( (userName != "" && userName != null) && (password != "" && password != null) ){
-				Connection con = new DBConnection().checkConnection("myBot","root");
-				if( con != null ){
+			if ((userName != "" && userName != null) && (password != "" && password != null)) {
+				Connection con = new DBConnection().checkConnection("myBot", "root");
+				if (con != null) {
 					pw.println("login");
 					String sql = "SELECT * FROM admininfo WHERE userName = ? AND password = ?";
 					try {
@@ -48,8 +45,8 @@ public class AdminLogin extends HttpServlet {
 						pst.setString(1, userName);
 						pst.setString(2, password);
 						ResultSet rst = pst.executeQuery();
-						
-						if( rst.next() ){
+
+						if (rst.next()) {
 							// adding a session
 							HttpSession session = request.getSession();
 							session.setAttribute("user", userName);
@@ -61,13 +58,13 @@ public class AdminLogin extends HttpServlet {
 							pst.setInt(1, adminId);
 							ResultSet rst2 = pst.executeQuery();
 							ArrayList<String> botNames = new ArrayList<>();
-							while(rst2.next()){
+							while (rst2.next()) {
 								botNames.add(rst2.getString("name"));
 							}
 							session.setAttribute("bots", botNames);
 							RequestDispatcher rd = request.getRequestDispatcher("adminHome.jsp");
 							rd.forward(request, response);
-						}else{
+						} else {
 							pw.println("Please SignUp First");
 							RequestDispatcher rd = request.getRequestDispatcher("/admin.jsp");
 							rd.include(request, response);
@@ -75,13 +72,13 @@ public class AdminLogin extends HttpServlet {
 					} catch (SQLException e) {
 						e.printStackTrace();
 					}
-				}else{
+				} else {
 					pw.println("Connection Error!");
 				}
-			}else{
+			} else {
 				pw.println("user name and password can't be empty");
 			}
-		}else{
+		} else {
 			RequestDispatcher rd = request.getRequestDispatcher("/adminSignUp.jsp");
 			rd.forward(request, response);
 		}

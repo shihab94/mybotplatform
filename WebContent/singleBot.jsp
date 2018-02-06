@@ -32,7 +32,7 @@
 			<label> Keywords </label> <br>
 			<ul>
  				<c:forEach items="${entities}" var="val">
-  					<li> <a href="QueryHandler?paramT=${ val }&dbName=${ param.dbName }"> <c:out value="${val}"/> </a> </li>
+  					<li> <a href="QueryHandler?paramT=${ val }"> <c:out value="${val}"/> </a> </li>
  				</c:forEach>
 			</ul>
 			<a href="keywordAndQuery.jsp?dbName=${param.dbName}">Create New Entity</a>

@@ -15,27 +15,31 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import util.DBConnection;
 
 @WebServlet("/QueryHandler")
 public class QueryHandler extends HttpServlet {
-	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		PrintWriter pw = response.getWriter();
-		String dbName =  request.getParameter("dbName");
-		String tableName =  request.getParameter("paramT");
+		// String dbName = request.getParameter("dbName");
+		String tableName = request.getParameter("paramT");
+		HttpSession session = request.getSession(false);
+		String dbName = (String) session.getAttribute("dbName");
 		pw.println(dbName);
-		
+
 		// entity query for corresponding bot
-		Connection con = new DBConnection().checkConnection(dbName,"root");
-		if(con != null){
+		Connection con = new DBConnection().checkConnection(dbName, "root");
+		if (con != null) {
 			try {
-				String queries = "SELECT * FROM "+tableName;
+				String queries = "SELECT * FROM " + tableName;
 				PreparedStatement pst = con.prepareStatement(queries);
 				ResultSet rst = pst.executeQuery();
 				List<String> list = new ArrayList<>();
-				while(rst.next()){
+				while (rst.next()) {
 					list.add(rst.getString("query"));
 				}
 				con.close();

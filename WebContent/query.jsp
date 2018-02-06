@@ -53,6 +53,9 @@
 				<input type="button" name="addRow" value="AddRow" onclick="add();"> <br> <br>
 				<input type="hidden" name="paramT" value="${ param.paramT }">
 				<input type="hidden" name="dbName" value="${ param.dbName }">
+				<!-- Answers for query section -->
+				<label>Set Answer For Query</label>
+				<input type="text" name="answer">
 				<input type="submit" name="newQuery" value="Add New">
 			</form>
 		</div>
