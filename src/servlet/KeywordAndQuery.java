@@ -6,7 +6,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -81,20 +80,6 @@ public class KeywordAndQuery extends HttpServlet {
 							pst = con.prepareStatement(sb.toString());
 							int finalStatus = pst.executeUpdate();
 							if (finalStatus > 0) {
-								con.close();
-								Connection conn = new DBConnection().checkConnection("myBot", "root");
-								// adding a session
-								int adminId = (int) session.getAttribute("adminId");
-								session.setAttribute("adminId", adminId);
-								String sql2 = "SELECT * FROM bots WHERE adminId = ?";
-								pst = conn.prepareStatement(sql2);
-								pst.setInt(1, adminId);
-								ResultSet rst2 = pst.executeQuery();
-								ArrayList<String> botNames = new ArrayList<>();
-								while (rst2.next()) {
-									botNames.add(rst2.getString("name"));
-								}
-								session.setAttribute("bots", botNames);
 								RequestDispatcher rd = request.getRequestDispatcher("adminHome.jsp");
 								rd.forward(request, response);
 								// pw.println("Bot Has Been Trained

@@ -35,7 +35,7 @@
 			<label> Your Bots</label>
 			<ul>
  				<c:forEach items="${bots}" var="value">
-  					<li> <a href="SingleBotHandler?dbName=${ value }"> <c:out value="${value}"/> </a> </li>
+  					<li> <a href="SingleBotHandler?botName=${ value }"> <c:out value="${value}"/> </a> </li>
  				</c:forEach>
 			</ul>
 		</div>
@@ -52,7 +52,7 @@
 				<span id="newRow"> </span>
 				<input type="button" name="addRow" value="AddRow" onclick="add();"> <br> <br>
 				<input type="hidden" name="paramT" value="${ param.paramT }">
-				<input type="hidden" name="dbName" value="${ param.dbName }">
+				<input type="hidden" name="dbName" value="${ dbName }">
 				<!-- Answers for query section -->
 				<label>Set Answer For Query</label>
 				<input type="text" name="answer">

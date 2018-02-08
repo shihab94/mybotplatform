@@ -50,16 +50,16 @@ public class AdminLogin extends HttpServlet {
 							// adding a session
 							HttpSession session = request.getSession();
 							session.setAttribute("user", userName);
+
 							// Bots table query for a particular admin all bots
-							int adminId = rst.getInt("adminId");
-							session.setAttribute("adminId", adminId);
-							String sql2 = "SELECT * FROM bots WHERE adminId = ?";
-							pst = con.prepareStatement(sql2);
-							pst.setInt(1, adminId);
-							ResultSet rst2 = pst.executeQuery();
+							String tableName = rst.getString("tableName");
+							session.setAttribute("tableName", tableName);
+							String getBotNameQuery = "SELECT * FROM " + tableName;
+							pst = con.prepareStatement(getBotNameQuery);
+							rst = pst.executeQuery();
 							ArrayList<String> botNames = new ArrayList<>();
-							while (rst2.next()) {
-								botNames.add(rst2.getString("name"));
+							while (rst.next()) {
+								botNames.add(rst.getString("botName"));
 							}
 							session.setAttribute("bots", botNames);
 							RequestDispatcher rd = request.getRequestDispatcher("adminHome.jsp");

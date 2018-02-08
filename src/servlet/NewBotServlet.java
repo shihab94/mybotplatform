@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -24,28 +26,35 @@ public class NewBotServlet extends HttpServlet {
 		PrintWriter pw = response.getWriter();
 		String botName = request.getParameter("botName");
 		HttpSession session = request.getSession(false);
-		int adminId = (int) session.getAttribute("adminId");
+		String tableName = (String) session.getAttribute("tableName");
 
 		if (botName != null && botName != "") {
 			Connection con = new DBConnection().checkConnection("myBot", "root");
 			if (con != null) {
-				String sql = "INSERT INTO bots(name,adminId) values(?,?)";
+				String sql = "INSERT INTO " + tableName + "(botName) values(?)";
 				try {
 					PreparedStatement pst = con.prepareStatement(sql);
 					pst.setString(1, botName);
-					pst.setInt(2, adminId);
 					int status = pst.executeUpdate();
 					if (status > 0) {
 						// creating new database for new bot
-						con.close();
-						con = new DBConnection().checkConnection("", "root");
-						String sql2 = "CREATE DATABASE " + botName;
-						pst = con.prepareStatement(sql2);
-						int status2 = pst.executeUpdate();
-						if (status2 > 0) {
+						// con.close();
+						// con = new DBConnection().checkConnection("", "root");
+						sql = "CREATE DATABASE " + botName;
+						pst = con.prepareStatement(sql);
+						status = pst.executeUpdate();
+						if (status > 0) {
+							sql = "SELECT * FROM " + tableName;
+							pst = con.prepareStatement(sql);
+							ResultSet rst = pst.executeQuery();
+							ArrayList<String> botNames = new ArrayList<>();
+							while (rst.next()) {
+								botNames.add(rst.getString("botName"));
+							}
+							session.setAttribute("bots", botNames);
 							session.setAttribute("dbName", botName);
-							RequestDispatcher rd = request.getRequestDispatcher("/keywordAndQuery.jsp");
-							rd.forward(request, response);
+							RequestDispatcher rd = request.getRequestDispatcher("/adminHome.jsp");
+							rd.include(request, response);
 						} else {
 							// delete the new row of 'bots' table if the create
 							// database query failed
